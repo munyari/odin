@@ -11,11 +11,14 @@ module Enumerable
     self
   end
 
+  # DONE
   def my_each_with_index
     return to_enum(:my_each_with_index) unless block_given?
     0.upto(self.length-1) { |i| yield(self[i], i) }
+    self
   end
 
+  # DONE
   def my_select
     return to_enum(:my_select) unless block_given?
     result = []
@@ -27,8 +30,9 @@ module Enumerable
     result
   end
 
+  # DONE
   def my_all?
-    return self unless block_given?
+    return true unless block_given?
     for i in self
       if !yield(i)
         return false
@@ -37,8 +41,9 @@ module Enumerable
     true
   end
 
+  # DONE
   def my_any?
-    return self unless block_given?
+    return true unless block_given?
     for i in self
       if yield(i)
         return true
@@ -47,10 +52,18 @@ module Enumerable
     false
   end
 
+  # DONE
   def my_none?
-    !self.my_any?
+    return false unless block_given?
+    for i in self
+      if yield(i)
+        return false
+      end
+    end
+    true
   end
 
+  # DONE
   def my_count
     self.length
   end
@@ -72,6 +85,10 @@ test_arr = [1, 2, 3, 4]
 test_arr.my_each{ |x| puts x  }
 test_hash.my_each { |x| puts x }
 test_arr.my_each_with_index { |x, i| puts "#{i}: #{x}" }
-#p test_arr.my_select { |x| x < 4 }
-
-
+p test_arr.my_select { |x| x < 4 }
+p test_arr.my_all? { |x| x.integer? }
+p test_arr.my_all? { |x| x > 2 }
+p test_arr.my_any? { |x| x.integer? }
+p test_arr.my_any? { |x| x > 5 }
+p test_arr.my_none? { |x| x > 5 } 
+p test_arr.my_none? { |x| x.integer? }

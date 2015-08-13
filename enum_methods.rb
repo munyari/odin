@@ -65,10 +65,12 @@ module Enumerable
 
   # DONE
   def my_count
-    self.length
+    self.size
   end
 
+  # DONE
   def my_map
+    return to_enum(:my_map) unless block_given?
     result = []
     for i in self
       result << yield(i)
@@ -77,9 +79,18 @@ module Enumerable
   end
 
   def my_inject
-
+    memo = self[0]
+    1.upto(self.size - 1) { |i| memo = yield(memo, self[i]) }
+    memo
   end
+
 end
+
+
+def multiply_els arr
+  return arr.my_inject { |m, k| k * m }
+end
+
 test_hash = { a:1, b:2, c:3 }
 test_arr = [1, 2, 3, 4]
 test_arr.my_each{ |x| puts x  }
@@ -92,3 +103,6 @@ p test_arr.my_any? { |x| x.integer? }
 p test_arr.my_any? { |x| x > 5 }
 p test_arr.my_none? { |x| x > 5 } 
 p test_arr.my_none? { |x| x.integer? }
+p test_arr.my_map { |x| x**2 }
+p (5..10).to_a.my_inject { |sum, n| sum * n }
+p multiply_els([2,4,5])

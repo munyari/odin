@@ -1,0 +1,6 @@
+[submodule "tic-tac-toe"]
+	path = tic-tac-toe
+	url = ./tic-tac-toe
+[submodule "adv_building_blocks"]
+	path = adv_building_blocks
+	url = ./adv_building_blocks

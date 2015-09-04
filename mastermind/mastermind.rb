@@ -31,23 +31,28 @@ module Mastermind
         retry
       end
 
-      puts "Awesome! Now we can get started!\n"
+      puts "\nAwesome! Now we can get started!\n\n"
       @mastermind = generate_mm(duplicates)
-      p @mastermind
       play
+    end
+
+    private
+    def colors
+      @@COLORS.values.map(&:strip).join(', ')
     end
 
     def play
       turns = 10
       @user_plays = []
+      puts "The playable colors are #{colors}\n\n"
       begin
         puts "#{turns} turns left"
-        puts "Enter your #{@n} colors"
+        puts "Enter your #{@n} colors\n\n"
         begin
           user_colors = gets.chomp.split.map(&:upcase).map(&:to_sym)
           unless valid_move(user_colors)
             raise ArgumentError, "Please restrict your moves to one of the colors 
-            #{@@COLORS.values.map(&:strip).join(', ')} and put #{@n} pegs on the board."
+            #{colors} and put #{@n} pegs on the board."
           end
         rescue ArgumentError => e
           puts e
@@ -61,9 +66,9 @@ module Mastermind
       end until turns == 0
 
       unless turns == 0
-        puts "Congrats, you win!"
+        puts "Congrats, you guessed right! You win!"
       else
-        puts "You lose!"
+        puts "You ran out of moves! You lose!"
       end
     end
 
@@ -95,7 +100,6 @@ module Mastermind
       play.each { |color| return false unless @@COLORS.include?(color) }
       true
     end
-    private
 
     def generate_mm(duplicates=false)
       if duplicates
@@ -106,6 +110,7 @@ module Mastermind
         @@COLORS.keys.sample(@n)
       end
     end
+
   end
 
 end

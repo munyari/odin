@@ -10,34 +10,45 @@ module Mastermind
       begin
         puts "Would you like to allow duplicate colors? (y/N)"
         answer = gets.chomp.downcase
-        unless ["y", "n"].include?(answer)
+        unless ["y", "n", ""].include?(answer)
           raise ArgumentError, "Please enter either \"y\" or \"n\"" 
         end
       rescue ArgumentError=> e
         puts e
         retry
       end
-      duplicates = answer == "y"
-      puts "OK. And how many balls should be in a row? (min: 3, max: 8)"
-      balls = [3, [gets.chomp.to_i, 8].min].max
-      @mastermind = generate_mm(duplicates, balls)
+      duplicates = "y" == answer
+      puts "OK."
+      begin
+      puts "And how many balls should be in a row? (min: 3, max: 8)"
+      @n = gets.chomp.to_i
+      unless (3..8).include?(@n)
+        raise ArgumentError, "Please enter a number between 3 and 8."
+      end
+      rescue ArgumentError=> e
+        puts e
+        puts "Let's try this again..."
+        retry
+      end
+
+      @mastermind = generate_mm(duplicates)
       p @mastermind
       play
     end
 
     def play
-
+       
     end
 
     private
 
-    def generate_mm(duplicates=false, n)
+    def generate_mm(duplicates=false)
       if duplicates
         result =[]
-        n.times { result << @@COLORS.sample } 
+        @n.times { result << @@COLORS.sample } 
         result
       else
-        @@COLORS.sample(n)
+        @@COLORS.sample(@n)
       end
     end
   end

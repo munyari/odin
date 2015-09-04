@@ -1,10 +1,10 @@
 module Mastermind
   class Game
     def initialize
-      @@COLORS = ["BLACK ", "BLUE  ",
-                  "BROWN ", "GREEN ",
-                  "ORANGE", "RED   ",
-                  "WHITE ", "YELLOW"]
+      @@COLORS = {BLACK:  "BLACK ", BLUE:   "BLUE  ",
+                  BROWN:  "BROWN ", GREEN:  "GREEN ",
+                  ORANGE: "ORANGE", RED:    "RED   ",
+                  WHITE:  "WHITE ", YELLOW: "YELLOW"}
       @player_board = []
       puts "Hey there! Welcome to Mastermind. Just a few settings before we begin."
       begin
@@ -20,45 +20,94 @@ module Mastermind
       duplicates = "y" == answer
       puts "OK."
       begin
-      puts "And how many balls should be in a row? (min: 3, max: 8)"
-      @n = gets.chomp.to_i
-      unless (3..8).include?(@n)
-        raise ArgumentError, "Please enter a number between 3 and 8."
-      end
+        puts "And how many balls should be in a row? (min: 3, max: 8)"
+        @n = gets.chomp.to_i
+        unless (3..8).include?(@n)
+          raise ArgumentError, "Please enter a number between 3 and 8."
+        end
       rescue ArgumentError=> e
         puts e
         puts "Let's try this again..."
         retry
       end
 
+      puts "Awesome! Now we can get started!\n"
       @mastermind = generate_mm(duplicates)
       p @mastermind
       play
     end
 
     def play
-       
+      turns = 10
+      @user_plays = []
+      begin
+        puts "#{turns} turns left"
+        puts "Enter your #{@n} colors"
+        begin
+          user_colors = gets.chomp.split.map(&:upcase).map(&:to_sym)
+          unless valid_move(user_colors)
+            raise ArgumentError, "Please restrict your moves to one of the colors 
+            #{@@COLORS.values.map(&:strip).join(', ')} and put #{@n} pegs on the board."
+          end
+        rescue ArgumentError => e
+          puts e
+          retry
+        end
+        @user_plays << user_colors
+        break if user_colors == @mastermind
+        turns -= 1
+        draw
+        hint_pegs(user_colors)
+      end until turns == 0
+
+      unless turns == 0
+        puts "Congrats, you win!"
+      else
+        puts "You lose!"
+      end
     end
 
+    def hint_pegs(play)
+      puts "Your hint pegs"
+      result = []
+      play.each_with_index do |color, i|
+        if color == @mastermind[i]
+          result << :BLACK
+        elsif @mastermind.include?(color)
+          result << :WHITE
+        end
+      end
+      result.sort.each { |peg| print "#{@@COLORS[peg] } " }
+      puts "\n\n"
+    end
+
+    def draw
+      puts "\nYour game board\n"
+      @user_plays.reverse_each do |play|
+        play.each { |color| print "#{@@COLORS[color]} " } # also want to put a number here
+        puts "\n"
+      end
+      puts "\n"
+    end
+
+    def valid_move(play)
+      return false unless play.size == @n
+      play.each { |color| return false unless @@COLORS.include?(color) }
+      true
+    end
     private
 
     def generate_mm(duplicates=false)
       if duplicates
         result =[]
-        @n.times { result << @@COLORS.sample } 
+        @n.times { result << @@COLORS.keys.sample } 
         result
       else
-        @@COLORS.sample(@n)
+        @@COLORS.keys.sample(@n)
       end
     end
   end
 
-  class Player
-    def initialize game
-      @game = game
-    end
-
-  end
 end
 
 Mastermind::Game.new

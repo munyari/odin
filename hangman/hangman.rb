@@ -3,6 +3,32 @@
 module Hangman
   # Game class defines the template for a game
   class Game
+    @@HANGMAN = <<-END.gsub(/^ {4}/, '')
+        ___________.._______
+    | .__________))______|
+    | | / /      ||
+    | |/ /       ||
+    | | /        ||.-''.
+    | |/         |/  _  \
+    | |          ||  `/,|
+    | |          (\\`_.'
+    | |         .-`--'.
+    | |        /Y . . Y\
+    | |       // |   | \\
+    | |      //  | . |  \\
+    | |     ')   |   |   (`
+    | |          ||'||
+    | |          || ||
+    | |          || ||
+    | |          || ||
+    | |         / | | \
+    """"""""""|_`-' `-' |"""|
+    |"|"""""""\ \       '"|"|
+    | |        \ \        | |
+    : :         \ \       : :
+    . .          `'       . .
+    END
+
     def initialize
       @@DICT = File.open("5desk.txt", "r").readlines
     end
@@ -11,6 +37,7 @@ module Hangman
 
     # draws the current state of the hangman
     def draw
+
     end
 
     # validates player's move
@@ -27,6 +54,9 @@ module Hangman
 
     # method that controls the game loop
     def play(p1, p2)
+    end
+
+    def save
     end
   end
 

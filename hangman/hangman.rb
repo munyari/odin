@@ -67,6 +67,7 @@ module Hangman
 
     # checks whether or not the game is complete
     def complete?
+      @guessed_chars == @word_chars
     end
 
 
@@ -81,7 +82,13 @@ module Hangman
         draw
         make_move
         guesses += 1 
-      end until guesses == 15
+      end until guesses == 15 || complete?
+      if complete?
+        draw
+        puts "Congrats! You win! You bloody genius!"
+      else
+        puts "Aww, tough luck mate :( \nWanna try again?"
+      end
     end
 
     def save

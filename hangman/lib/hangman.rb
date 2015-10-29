@@ -64,12 +64,13 @@ module Hangman
           print c
         end
       end
-      puts
+      #puts
     end
 
     # validates player's move
     def valid_move?(char)
-      char.length == 1 && char.downcase.between?("a", "z")
+      char.length == 1 && 
+        (char.downcase.between?("a", "z") || char.between?("1", "0"))
     end
 
     # checks whether or not the game is complete
@@ -102,18 +103,23 @@ module Hangman
     # make a move by prompting the player
     def make_move
       puts "\nSelect a character, a-z"
+      puts "You can also save [0] the current game or load [1] a save file"
       move = gets.chomp.downcase
       until valid_move?(move)
         puts "Sorry, that is not a valid move. Please enter a single 
         alphabetical character"
         move = gets.chomp.downcase
       end
-      #if move.between?("a", "z")
-      if @word_chars.include?(move.downcase) 
-        @guessed_chars.add(move.downcase)
-      end
-      if @word_chars.include?(move.upcase)
-        @guessed_chars.add(move.upcase)
+      if move == "0"
+        save_game
+      elsif move == "1"
+        load_game
+      elsif move.between?("a", "z")
+        if @word_chars.include?(move.downcase) 
+          @guessed_chars.add(move.downcase)
+        elsif @word_chars.include?(move.upcase)
+          @guessed_chars.add(move.upcase)
+        end
       end
     end
 
@@ -137,6 +143,7 @@ module Hangman
         YAML::load(yaml)
       end
     end
+
   end
 end
 

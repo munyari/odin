@@ -1,0 +1,23 @@
+--- !ruby/object:Hangman::Game
+word: ritualize
+word_chars: !ruby/object:Set
+  hash:
+    r: true
+    i: true
+    t: true
+    u: true
+    a: true
+    l: true
+    z: true
+    e: true
+guessed_chars: !ruby/object:Set
+  hash:
+    r: true
+    e: true
+    a: true
+    u: true
+    z: true
+wrong_chars: !ruby/object:Set
+  hash: {}
+total_guess: 0
+total_guesses: 5

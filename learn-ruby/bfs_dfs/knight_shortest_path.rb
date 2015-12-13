@@ -35,3 +35,6 @@ end
 
 p knight_moves([1,1],[1,1])
 p knight_moves([1,1],[1,2])
+p knight_moves([1,1],[2,3])
+p knight_moves([1,1],[4,4])
+p knight_moves([4,4],[1,1])

@@ -1,33 +1,44 @@
+#!/usr/bin/env ruby
+
 def caesar_cipher(str, shift)
-    s_arr = str.chars
-    s_arr.collect! do |c|
-        ascii = c.ord
-        new = c.ord + shift
-        if alpha?(ascii)
-            if alpha?(new)
-                c = new.chr
-            elsif uppercase?(ascii)
-                c = overflow(new, 65, 90)
-            else
-                c = overflow(new, 97, 122)
-            end
-        else
-            c
-        end
+  unless str.is_a?(String) && shift.is_a?(Fixnum)
+    raise ArgumentError, "Argument is invalid"
+  end
+  shift = shift % 26
+  s_arr = str.chars
+  s_arr.collect! do |c|
+    ascii = c.ord
+    if uppercase?(ascii)
+      c = new_char(ascii, shift, :uppercase)
+    elsif lowercase?(ascii)
+      c = new_char(ascii, shift, :lowercase)
+    else
+      c
     end
-    s_arr.join
+  end
+  s_arr.join
 end
 
-def alpha?(c)
-   c.between?(65, 90) || c.between?(97, 122)
+def new_char(c, shift, l_case)
+  if l_case == :uppercase
+    low = 65
+    high = 90
+  elsif l_case == :lowercase
+    low = 97
+    high = 122
+  end
+
+  if c + shift > high
+    (((c + shift) % high) + low - 1).chr
+  else
+    (c + shift).chr
+  end
 end
 
 def uppercase?(c)
-    c.between?(65, 90)
+  c.between?(65, 90)
 end
 
-def overflow(new, first_char, last_char)
-   ((new % (last_char+1)) + first_char).chr
+def lowercase?(c)
+  c.between?(97, 122)
 end
-
-caesar_cipher("What a string!", 5)

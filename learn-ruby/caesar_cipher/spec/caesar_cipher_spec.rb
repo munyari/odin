@@ -1,4 +1,5 @@
 require "../caesar_cipher"
+
 describe "#caesar_cipher" do
 
   let(:numeric) { "123456" }
